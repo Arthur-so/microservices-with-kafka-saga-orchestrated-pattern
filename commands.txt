@@ -1,0 +1,14 @@
+exibir containers
+docker ps
+
+parar container
+docker stop <id>
+
+deletar containers parados
+docker container prune -f
+
+subir containers
+docker-compose up --build -d
+
+conectar com mondodb pelo docker
+docker exec -it order-db mongosh "mongodb://admin:123456@localhost:27017"
