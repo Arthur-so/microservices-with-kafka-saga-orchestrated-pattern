@@ -117,6 +117,7 @@ services:
 
   product-validation-service:
     build: "./product-validation-service"
+    container_name: product-validation-service
     depends_on:
       - product-db
       - kafka
@@ -134,6 +135,7 @@ services:
 
   payment-service:
     build: "./payment-service"
+    container_name: payment-service
     depends_on:
       - payment-db
       - kafka
@@ -151,6 +153,7 @@ services:
 
   inventory-service:
     build: "./inventory-service"
+    container_name: inventory-service
     depends_on:
       - inventory-db
       - kafka

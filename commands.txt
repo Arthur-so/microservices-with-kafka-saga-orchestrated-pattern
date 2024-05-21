@@ -15,3 +15,9 @@ docker exec -it order-db mongosh "mongodb://admin:123456@localhost:27017"
 
 derrubar containers
 docker-compose down
+
+build com gradle na pasta de cada aplicacao
+gradle build
+
+ver logs da aplicação subida com docker
+docker logs --follow <nome-do-servico>
