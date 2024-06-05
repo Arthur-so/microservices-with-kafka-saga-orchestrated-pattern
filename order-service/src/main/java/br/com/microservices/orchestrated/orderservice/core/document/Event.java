@@ -13,12 +13,13 @@ import java.util.List;
 @Data
 @Builder
 public class Event {
-    private String source;
-    private String status;
-    private List<Event> eventHistory;
-    private LocalDateTime createdAt;
-    private Order payload;
     private String id;
     private String transactionId;
     private String orderId;
+    private Order payload;
+    private String source;
+    private String status;
+    private List<History> eventHistory;
+    private LocalDateTime createdAt;
+
 }

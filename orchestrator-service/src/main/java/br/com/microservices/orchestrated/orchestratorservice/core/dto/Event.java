@@ -17,7 +17,7 @@ import java.util.List;
 public class Event {
     private EEventSource source;
     private ESagaStatus status;
-    private List<Event> eventHistory;
+    private List<History> eventHistory;
     private LocalDateTime createdAt;
     private Order payload;
     private String id;

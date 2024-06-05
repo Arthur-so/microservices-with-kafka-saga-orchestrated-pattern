@@ -21,3 +21,6 @@ gradle build
 
 ver logs da aplicação subida com docker
 docker logs --follow <nome-do-servico>
+
+subir container específicos, exemplo:
+docker-compose up --build -d kafka redpanda-console order-db product-db inventory-db payment-db

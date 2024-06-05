@@ -14,9 +14,9 @@ import java.util.List;
 @Builder
 public class Order {
     private String id;
-    private List<OrderProduct> products;
-    private double totalAmount;
-    private int totalItems;
+    private List<OrderProducts> products;
     private LocalDateTime createdAt;
     private String transactionId;
+    private double totalAmount;
+    private int totalItems;
 }

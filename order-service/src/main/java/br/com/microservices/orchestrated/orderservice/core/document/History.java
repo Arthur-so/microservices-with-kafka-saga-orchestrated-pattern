@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,5 +16,5 @@ public class History {
     private String source;
     private String status;
     private String message;
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 }
