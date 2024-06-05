@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @Data
 public class OrderProduct {
     private Product product;
-    private Integer quantity;
+    private int quantity;
 }

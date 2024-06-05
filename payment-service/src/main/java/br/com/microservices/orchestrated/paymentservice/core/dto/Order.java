@@ -16,7 +16,7 @@ public class Order {
     private String id;
     private List<OrderProduct> products;
     private double totalAmount;
-    private Integer totalItems;
+    private int totalItems;
     private LocalDateTime createdAt;
     private String transactionId;
 }
