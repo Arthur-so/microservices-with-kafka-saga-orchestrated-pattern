@@ -1,12 +1,15 @@
 package br.com.microservices.orchestrated.orderservice.core.service;
 
+import br.com.microservices.orchestrated.orderservice.config.exception.ValidationException;
 import br.com.microservices.orchestrated.orderservice.core.document.Event;
+import br.com.microservices.orchestrated.orderservice.core.dto.EventFilters;
 import br.com.microservices.orchestrated.orderservice.core.repository.EventRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -14,6 +17,42 @@ import java.time.LocalDateTime;
 public class EventService {
 
     private final EventRepository eventRepository;
+
+    public Event findByFilters(EventFilters filters) {
+        validateEmptyFilters(filters);
+
+        if (!filters.getOrderId().isEmpty()) {
+            return findByOrderId(filters);
+        }
+        else {
+            return findByTransactionId(filters);
+        }
+    }
+
+    private void validateEmptyFilters(EventFilters filters) {
+        if (filters.getOrderId().isEmpty() && filters.getTransactionId().isEmpty()) {
+            throw new ValidationException("OrderID or TransactionID must be informed.");
+        }
+    }
+
+    private Event findByTransactionId(EventFilters transactionIdFilter) {
+        return eventRepository
+                .findTop1ByTransactionIdOrderByCreatedAtDesc()
+                .orElseThrow(
+                        () -> new ValidationException("Event not found by transactionId."));
+    }
+
+    private Event findByOrderId(EventFilters orderIdFilter) {
+        return eventRepository
+                .findTop1ByOrderIdOrderByCreatedAtDesc()
+                .orElseThrow(
+                        () -> new ValidationException("Event not found by orderId."));
+    }
+
+
+    public List<Event> findAll() {
+        return eventRepository.findAllByOrderByCreatedAtDesc();
+    }
 
     public void notifyEnding(Event event) {
         event.setOrderId(event.getPayload().getId());
