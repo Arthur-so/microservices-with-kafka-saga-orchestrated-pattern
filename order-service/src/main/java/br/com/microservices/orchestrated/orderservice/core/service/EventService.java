@@ -22,10 +22,10 @@ public class EventService {
         validateEmptyFilters(filters);
 
         if (!filters.getOrderId().isEmpty()) {
-            return findByOrderId(filters);
+            return findByOrderId(filters.getOrderId());
         }
         else {
-            return findByTransactionId(filters);
+            return findByTransactionId(filters.getTransactionId());
         }
     }
 
@@ -35,16 +35,18 @@ public class EventService {
         }
     }
 
-    private Event findByTransactionId(EventFilters transactionIdFilter) {
+    private Event findByTransactionId(String transactionIdFilter) {
+        log.info("TO AQUI MERMAO TRANS");
         return eventRepository
-                .findTop1ByTransactionIdOrderByCreatedAtDesc()
+                .findTop1ByTransactionIdOrderByCreatedAtDesc(transactionIdFilter)
                 .orElseThrow(
                         () -> new ValidationException("Event not found by transactionId."));
     }
 
-    private Event findByOrderId(EventFilters orderIdFilter) {
+    private Event findByOrderId(String orderIdFilter) {
+        log.info("TO AQUI MERMAO ORDER");
         return eventRepository
-                .findTop1ByOrderIdOrderByCreatedAtDesc()
+                .findTop1ByOrderIdOrderByCreatedAtDesc(orderIdFilter)
                 .orElseThrow(
                         () -> new ValidationException("Event not found by orderId."));
     }
