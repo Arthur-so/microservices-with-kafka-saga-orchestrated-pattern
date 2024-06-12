@@ -44,6 +44,6 @@ public class Validation {
 
     @PreUpdate
     public void preUpdate() {
-        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
 }
