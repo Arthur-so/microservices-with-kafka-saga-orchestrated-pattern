@@ -27,6 +27,12 @@ public class Payment {
     private String transactionId;
 
     @Column(nullable = false)
+    private int totalItems;
+
+    @Column(nullable = false)
+    private double totalAmount;
+
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private EPaymentStatus status;
 
