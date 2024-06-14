@@ -31,12 +31,13 @@ public class PaymentService {
         try{
             checkForExistingPayment(event);
             createPaymentRecordAndUpdateEvent(event);
-            var payment = findPaymentByOrderIdAndTransactionId(event.getPayload().getId(), event.getTransactionId());
+            var payment = findPaymentByOrderIdAndTransactionId(event);
             validateAmount(payment.getTotalAmount());
             changePaymentToSuccess(payment);
             handleSuccess(event);
         } catch (Exception ex) {
             log.error("Error trying to validate product: ", ex);
+            handlePaymentFailure(event, ex.getMessage());
         }
         producer.sendEvent(jsonUtil.toJson(event));
     }
@@ -80,8 +81,8 @@ public class PaymentService {
         }
     }
 
-    private Payment findPaymentByOrderIdAndTransactionId(String orderId, String transactionId) {
-        return paymentRepository.findByOrderIdAndTransactionId(orderId, transactionId)
+    private Payment findPaymentByOrderIdAndTransactionId(Event event) {
+        return paymentRepository.findByOrderIdAndTransactionId(event.getPayload().getId(), event.getTransactionId())
                 .orElseThrow(() -> new ValidationException("Payment not found by orderId and transactionId"));
     }
 
@@ -118,6 +119,27 @@ public class PaymentService {
 
         event.addHistory(history);
     }
+
+    private void handlePaymentFailure(Event event, String message) {
+        event.setStatus(ESagaStatus.ROLLBACK_PENDING);
+        event.setSource(CURRENT_SOURCE);
+        addHistory(event, "Fail to to realize payment: ".concat(message));
+    }
+
+    public void realizeRefund(Event event) {
+        changePaymentStatusToRefund(event);
+        event.setStatus(ESagaStatus.FAIL);
+        event.setSource(CURRENT_SOURCE);
+        addHistory(event, "Rollback executed on payment.");
+    }
+
+    private void changePaymentStatusToRefund(Event event) {
+        var payment = findPaymentByOrderIdAndTransactionId(event);
+        payment.setStatus(EPaymentStatus.REFUND);
+        setEventAmountItems(event, payment);
+        save(payment);
+    }
+
     private void save(Payment payment) {
         paymentRepository.save(payment);
     }
