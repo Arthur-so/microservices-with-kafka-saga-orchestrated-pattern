@@ -127,10 +127,15 @@ public class PaymentService {
     }
 
     public void realizeRefund(Event event) {
-        changePaymentStatusToRefund(event);
         event.setStatus(ESagaStatus.FAIL);
         event.setSource(CURRENT_SOURCE);
-        addHistory(event, "Rollback executed on payment.");
+        try{
+            changePaymentStatusToRefund(event);
+            addHistory(event, "Rollback executed on payment.");
+        } catch(Exception ex) {
+            addHistory(event, "Rollback not executed for payment: ".concat(ex.getMessage()));
+        }
+        producer.sendEvent(jsonUtil.toJson(event));
     }
 
     private void changePaymentStatusToRefund(Event event) {
