@@ -36,7 +36,6 @@ public class EventService {
     }
 
     private Event findByTransactionId(String transactionIdFilter) {
-        log.info("TO AQUI MERMAO TRANS");
         return eventRepository
                 .findTop1ByTransactionIdOrderByCreatedAtDesc(transactionIdFilter)
                 .orElseThrow(
@@ -44,7 +43,6 @@ public class EventService {
     }
 
     private Event findByOrderId(String orderIdFilter) {
-        log.info("TO AQUI MERMAO ORDER");
         return eventRepository
                 .findTop1ByOrderIdOrderByCreatedAtDesc(orderIdFilter)
                 .orElseThrow(
