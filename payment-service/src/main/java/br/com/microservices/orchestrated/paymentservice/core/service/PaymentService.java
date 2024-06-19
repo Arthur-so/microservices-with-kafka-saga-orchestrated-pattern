@@ -123,7 +123,7 @@ public class PaymentService {
     private void handlePaymentFailure(Event event, String message) {
         event.setStatus(ESagaStatus.ROLLBACK_PENDING);
         event.setSource(CURRENT_SOURCE);
-        addHistory(event, "Fail to to realize payment: ".concat(message));
+        addHistory(event, "Fail to realize payment: ".concat(message));
     }
 
     public void realizeRefund(Event event) {
