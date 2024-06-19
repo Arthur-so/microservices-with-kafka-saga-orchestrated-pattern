@@ -36,19 +36,17 @@ public class OrchestrationService {
     public void finishSagaSuccess(Event event) {
         event.setSource(ORCHESTRATOR);
         event.setStatus(SUCCESS);
-        var topic = getTopic(event);
         log.info("SAGA FINISHED SUCCESSFULLY FOR EVENT {}!", event.getId());
         addHistory(event, "Saga finished successfully!");
-        sendToProducer(event, topic);
+        notifyEndingSaga(event);
     }
 
     public void finishSagaFail(Event event) {
         event.setSource(ORCHESTRATOR);
         event.setStatus(FAIL);
-        var topic = getTopic(event);
         log.info("SAGA FINISHED WITH ERRORS FOR EVENT {}!", event.getId());
         addHistory(event, "Saga finished with errors!");
-        sendToProducer(event, topic);
+        notifyEndingSaga(event);
     }
 
     public void continueSaga(Event event) {
