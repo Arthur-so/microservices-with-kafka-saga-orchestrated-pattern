@@ -142,6 +142,6 @@ public class InventoryService {
     private Inventory findInventoryByProductCode(String productCode) {
         return inventoryRepository
                 .findByProductCode(productCode)
-                .orElseThrow(() -> new ValidationException("Inventory not found by product."));
+                .orElseThrow(() -> new ValidationException("Inventory not found by informed product."));
     }
 }
